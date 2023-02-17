@@ -4,4 +4,4 @@ A Python script to trim the tail(end) of a WAV audio file upto specified time fr
 2. It will pickup only the wav files
 3. Store the trimmed files in another directory within the directory specified called "auto_trimmed"
 
-At the moment, the script has been specified to trim uptil 10secs, you can change it by editing the 't' variable
+At the moment, the script has been specified to trim upto 10secs from start, you can change it by editing the 't' variable
