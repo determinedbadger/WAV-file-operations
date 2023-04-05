@@ -6,4 +6,4 @@ A Python script to segment a WAV file according to a timestamps list. The script
 
 There are two inputs needed - 
 1. dir = directory to scrape the wav files from
-2. t = timestamps to split teh wav files with
+2. t = timestamps to split the wav files with
