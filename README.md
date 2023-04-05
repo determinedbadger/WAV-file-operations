@@ -1,7 +1,9 @@
-A Python script to trim the tail(end) of a WAV audio file upto specified time from the start. The script works as follows - 
+A Python script to segment a WAV file according to a timestamps list. The script scrapes the specified folder for wav files to operate on. The script works as follows - 
 
-1. Specify the directory where the WAV files are located.
-2. It will pickup only the wav files
-3. Store the trimmed files in another directory within the directory specified called "auto_trimmed"
+1. Specify the directory to scrape the wave files from.
+2. Specify the timestamps to segment with as a list - 't'
+3. Segmented files are stored into a subdirectory of the specified folder named 'auto_trimmed'
 
-At the moment, the script has been specified to trim upto 10secs from start, you can change it by editing the 't' variable
+There are two inputs needed - 
+1. dir = directory to scrape the wav files from
+2. t = timestamps to split teh wav files with
