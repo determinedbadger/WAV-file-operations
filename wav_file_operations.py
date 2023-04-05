@@ -5,46 +5,58 @@
 #It searches for all the files with the extension ".wav" and adds it to the list of files to operate on
 #Finally the trimmed filenames are stored into a subdirectory(named "auto_trimmed") within the specified directory
 
-import scipy.io.wavfile as wavfile
 import numpy as np
-from matplotlib import pyplot as plt
+import platform
 import os
 import seaborn as sns
+import soundfile as sf
 
 #Preconfiguration variables
 #Variables to configure the trimming operation
 
-t = 10  #seconds upto which the wav file to be trimmedf
+t = [0,15,30,60]  #timestamps onto which the file to be split
 
-master_dir = ""  #location of your directory
+dir = r'' #location of your directory to be scraped
 
-filenames = []  #empty list to store wav file names
-for f in os.listdir(master_dir): #loop to store compatible file names
+master_dir = ""  
+
+filenames = []
+for f in os.listdir(dir): #loop to store compatible file names
     name, ext = os.path.splitext(f)
     if ext == '.wav':
         filenames.append(f)
+
+#creating a subdirectory to store the operated files
+stor_dir = os.path.join(dir,'auto_trimmed')
+try:
+  os.makedirs(stor_dir,777)
+except:
+  print('Directory already exists')
 
 #storage directory creation
 stor_dir = os.path.join(dir,'auto_trimmed')
 os.makedirs(stor_dir,777)
 
-#Trimming function definition
-
 for filename in filenames:
-  #FILENAME STRING MANIPULATION
-  file_dir = os.path.join(dir,filename) #full directory name
-  sr, data=wavfile.read(file_dir) #read wavfile to gather data, sr = <Sampling Rate>; data = <numpy array of wavfile>
-  filename = file_dir.rsplit('/', 1)[1] #extracting filename
-  write_directory = os.path.join(stor_dir,filename) #compose write directory string
+  #To store new write directories for different filenames
+  file_dir = os.path.join(dir,filename)
+  data, sr = sf.read(file_dir)
+  
+  #Splitting the ndarray into segments according to timestamps
+  for i in range(len(t[:-1])):
+    data_new = []
+    write_directory = []
+    
+    data_new = data[sr*t[i] : sr*t[i+1]]
 
-  #SAMPLE TRIMMING
-  sample_no = sr*10 #Number of samples for a 10s sample extraction
-  data_new = data[0:sample_no]  #Using numpy array slicing to trim the audio to 10s sample
 
-  #WRITING TO DIRECTORY
-  wavfile.write(write_directory,sr,data_new.astype(np.int16))
+    if platform.system() == 'Windows':
+      a = '\\'
+    else:
+      a = '/'
 
-def tail_trim(data): #Tail trimming function
-  sample_no = sr*10 #Number of samples for a 10s sample extraction
-  data_new = data[0:sample_no]  #Using numpy array slicing to trim the audio to 10s sample
-  return data_new
+    filename = file_dir.rsplit(a, 1)[1][:-4] + '_' + str(i) + '.wav'
+    write_directory = os.path.join(stor_dir,filename)
+
+    sf.write(write_directory, data_new, sr)
+    print(write_directory + '  --> written')
