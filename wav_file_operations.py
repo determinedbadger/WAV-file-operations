@@ -18,8 +18,6 @@ t = [0,15,30,60]  #timestamps onto which the file to be split
 
 dir = r'' #location of your directory to be scraped
 
-master_dir = ""  
-
 filenames = []
 for f in os.listdir(dir): #loop to store compatible file names
     name, ext = os.path.splitext(f)
